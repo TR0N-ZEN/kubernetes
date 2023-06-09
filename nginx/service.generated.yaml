@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"nginx-s","namespace":"default"},"spec":{"ports":[{"port":80,"protocol":"TCP","targetPort":8080}],"selector":{"app":"nginx.l"}}}
+  creationTimestamp: "2023-06-09T12:28:42Z"
+  name: nginx-s
+  namespace: default
+  resourceVersion: "19536"
+  uid: e7b1ab2d-5991-45b1-9163-ad3875ea4f65
+spec:
+  clusterIP: 10.106.238.133
+  clusterIPs:
+  - 10.106.238.133
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: nginx.l
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
