@@ -1,24 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-d
+  name: mongodb-express-d
   labels:
-    app: mongodb
+   app: mongodb-express-l
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb
+      app: mongodb-express-l
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mongodb-express-l
     spec:
       containers:
-      - name: mongodb-cont
-        image: mongo # https://hub.docker.com/_/mongo
+      - name: mongodb-express-cont
+        image: mongo-express # https://hub.docker.com/_/mongo-express
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         ports:
-        - containerPort: 27017
+        - containerPort: 8081
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
@@ -30,5 +34,8 @@ spec:
             secretKeyRef:
               name: mongodb-sec
               key: mongo-root-password
-
-
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-c
+              key: database_url

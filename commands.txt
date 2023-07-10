@@ -1,8 +1,0 @@
-kubectl get
-  pods 
-  deployment
-  all
-  secret
-    -o {wide,yaml}
-
-kubectl apply -f {deployment,service,secret}.yaml
