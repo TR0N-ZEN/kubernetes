@@ -1,3 +1,5 @@
+# to make this deployment available in an arbitrary namespace x execute
+# kubectl apply -f ./deployment.yaml --namespace=x
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,11 +9,12 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
+    matchLabels: # others like service.yaml can try matching against this label with selector
+    # TODO what is the difference to deployment.yaml.spec.template.metadata.labels?
       app: mongodb
   template:
     metadata:
-      labels:
+      labels: # key value pairs in here are matched by key value pairs in service.yaml.spec.selector
         app: mongodb
     spec:
       containers:
@@ -23,12 +26,12 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: mongodb-sec
+              name: mongodb-sec # is matched against secret.yaml.metadata.name
               key: mongo-root-username
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mongodb-sec
+              name: mongodb-sec # is matched against secret.yaml.metadata.name
               key: mongo-root-password
 
 

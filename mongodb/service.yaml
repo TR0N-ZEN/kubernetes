@@ -1,9 +1,11 @@
+# to make this service available in an arbitrary namspace x execute
+# kubectl apply -f ./service.yaml --namespace=x
 apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-s
 spec:
-  selector: # for connecting to containers via deployment.yaml.spec.template.label
+  selector: # key value pairs in here are matched by key value pairs in deployment.yaml.spec.template.label
     app: mongodb
   ports:
   - protocol: TCP

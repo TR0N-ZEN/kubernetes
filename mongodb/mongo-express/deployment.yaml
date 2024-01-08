@@ -1,3 +1,5 @@
+# to make this deployment available in an arbitrary namspace x execute
+# kubectl apply -f ./deployment.yaml --namespace=x
 apiVersion: apps/v1
 kind: Deployment
 metadata:

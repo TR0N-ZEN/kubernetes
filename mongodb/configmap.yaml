@@ -1,3 +1,5 @@
+# to make this configmap available in an arbitrary namspace x execute
+# kubectl apply -f ./configmap.yaml --namespace=x
 apiVersion: v1
 kind: ConfigMap
 metadata:
