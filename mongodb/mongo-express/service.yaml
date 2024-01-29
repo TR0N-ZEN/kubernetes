@@ -7,7 +7,7 @@ metadata:
 spec:
   selector:
     app: mongodb-express
-  type: LoadBalancer # makes service accessible from outside of kubernetes
+  type: LoadBalancer # makes service accessible from outside of the kubernetes cluster
   ports:
   - protocol: TCP
     port: 8081 # port exposed by the service
