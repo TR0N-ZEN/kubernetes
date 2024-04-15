@@ -5,22 +5,32 @@ kind: Deployment
 metadata:
   name: mongodb-d
   labels:
-    app: mongodb
+  # labels this deployment has so that other kubernetes objects can select to interact via matchLabels
+    app: mongodb-deployment
 spec:
   replicas: 1
   selector:
-    matchLabels: # others like service.yaml can try matching against this label with selector
-    # TODO what is the difference to deployment.yaml.spec.template.metadata.labels?
+    matchLabels:
+    # labels here select which pods are managed by this deployment(.yaml)
+    # so they are matched against spec.template.metadata.lables
       app: mongodb
   template:
+  # in this section a pod in this deployment is described
+  # documatation @
+  #   https://kubernetes.io/docs/concepts/workloads/pods/#what-is-a-pod
+  #   https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates
     metadata:
-      labels: # key value pairs in here are matched by key value pairs in service.yaml.spec.selector
-        app: mongodb
+      labels:
+      # labels the pods so they can be selected via matchLabels
+        app: mongodb-pod
     spec:
       containers:
+      # this pod holds a single container
       - name: mongodb-cont
         image: mongo # https://hub.docker.com/_/mongo
         ports:
+        # ports listed here can be reached by any other container in the same pod via localhost
+        # https://kubernetes.io/docs/concepts/workloads/pods/#pod-networking
         - containerPort: 27017
         env:
         - name: MONGO_INITDB_ROOT_USERNAME

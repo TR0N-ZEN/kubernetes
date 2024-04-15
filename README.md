@@ -4,7 +4,10 @@ graph LR
     direction TB
 
     subgraph ing["ingress"]
-      ing_metadata["metadata"] --- ing_name["name"]      ing_spec["spec"] --- ing_rules["rules"] --- ing_host["host] --- ing_protcol["protocol name"]
+      ing_metadata["metadata"] --- ing_name["name"]
+      ing_spec["spec"] --- ing_rules["rules"]
+      ing_rules["rules"] --- ing_host["host"]
+      ing_host["host"] --- ing_protcol["protocol name"]
     end
 
     subgraph cm["configmap"]
@@ -45,7 +48,62 @@ graph LR
     d -->|references| cm
 
   end
-``` 
+```
+
+```asciiart
+
+
+
+       ┌────────────────────────────┐
+       │        ingress             │
+       ├────────────────────────────┤
+       │metadata                    │
+       │  name                      │
+       │spec                        │
+       │  rules                     │
+       │    host                    │
+       │      protocol name         │
+       └────────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+                                     ┌─────────────────┐
+                                     │    service      │
+                                     │─────────────────│
+                                     │spec             │
+       ┌─────────────────────┐       │  ports          │
+       │     deployment      │       │    - protocol   │
+       ├─────────────────────┤       │      port       │
+       │metadata             │       │      targetPort─┼───────────────────────────────┐
+       │  labels─────────────┼───────┼─►selector       │                               │
+       │  name               │       └─────────────────┘                               │
+       │  namespace          │                                                         │
+       │spec                 │           sets number of      ┌──────────┐              │
+       │  replicas───────────┼──────────────────────────────►│replicaset│              │
+       │  template───────────┼───────────────────────┐       └─────┬────┘              │
+       └─┬────────────────┬──┘                       │             │ has one or more   │
+         │                │                          │             │                   │
+         │references      │references                │             ▼                   │
+         │                │                          │ describes ┌───┐                 │
+         ▼                ▼                          └──────────►│pod│◄────────────────┘
+   ┌──────────┐       ┌─────────────┐                            └─┬─┘
+   │  secret  │       │  configmap  │                              │
+   ├──────────┤       ├─────────────┤                              │ has one or more
+   │metadata  │       │metadata     │                              │
+   │name      │       │  name       │                              ▼
+   │data      │       │  namespace  │                          ┌─────────┐
+   └──────────┘       └─────────────┘                          │container│
+                                                               └─────────┘
+
+```
 
 **namespace**s isolate/partition kubernetes entities into parts which are from a kubernetes view to be managed seperately  
 which does not mean pods in different namespaces can't communicate but  

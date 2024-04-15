@@ -1,3 +1,5 @@
+# documentation at https://kubernetes.io/docs/concepts/services-networking/service/
+#
 # to make this service available in an arbitrary namspace x execute
 # kubectl apply -f ./service.yaml --namespace=x
 apiVersion: v1
@@ -5,8 +7,13 @@ kind: Service
 metadata:
   name: mongodb-s
 spec:
-  selector: # key value pairs in here are matched by key value pairs in deployment.yaml.spec.template.label
-    app: mongodb
+  selector:
+  # for selecting pods to manage
+    # the next key value pair matches to entries
+    # inside ./deployment.yaml under spec.template.label
+    # (which labels the pod managed by the deployment
+    # described by ./deployment.yaml)
+    app: mongodb-pod
 # spec.type: ClusterIP # is default for spec.type
   ports:
   - protocol: TCP
