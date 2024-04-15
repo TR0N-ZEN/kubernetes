@@ -16,7 +16,7 @@ spec:
       labels:
         app: mongodb-express-l
     spec:
-      containers:
+      containers: # containers defined here reside to one so called "pod", containers in a pod can contact each other by their names
       - name: mongodb-express-cont
         image: mongo-express # https://hub.docker.com/_/mongo-express
         resources:
@@ -24,7 +24,7 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 8081
+        - containerPort: 8081 # port exposed to other kubernetes "things" by the container based on the image mongodb-express
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:

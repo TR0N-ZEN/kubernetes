@@ -57,19 +57,22 @@ Access and resource limitation works via namespaces.
 
 ---
 
+get kubernetes on your servers running by following instructions on https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+
 command cache:
 
->kubectl apply \
->   -f ./service.yaml \
->   -f ./secret.yaml \
->   -f ./deployment.yaml \
->   -f ./configmap.yaml \
->   -f ./mongo-express/service.yaml \
->   -f ./mongo-express/deployment.yaml
+kubectl apply \
+   -f ./service.yaml \
+   -f ./secret.yaml \
+   -f ./deployment.yaml \
+   -f ./configmap.yaml \
+   -f ./mongo-express/service.yaml \
+   -f ./mongo-express/deployment.yaml
 
->clear; kubectl get all
+clear; kubectl get all
 
->kubectl delete deployment mongodb-d mongodb-express-d; \
->kubectl delete configmap mongodb-c; \
->kubectl delete service mongodb-s mongodb-express-s; \
->kubectl delete secret mongodb-sec;
+kubectl delete deployment mongodb-d mongodb-express-d; \
+kubectl delete configmap mongodb-c; \
+kubectl delete service mongodb-s mongodb-express-s; \
+kubectl delete secret mongodb-sec;
