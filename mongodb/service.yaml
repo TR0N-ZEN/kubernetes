@@ -13,7 +13,7 @@ spec:
     # inside ./deployment.yaml under spec.template.label
     # (which labels the pod managed by the deployment
     # described by ./deployment.yaml)
-    app: mongodb-pod
+    app: mongodb-p-l
 # spec.type: ClusterIP # is default for spec.type
   ports:
   - protocol: TCP

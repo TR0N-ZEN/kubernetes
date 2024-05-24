@@ -1,37 +1,37 @@
 # to make this deployment available in an arbitrary namspace x execute
 # kubectl apply -f ./deployment.yaml --namespace=x
+# names are suffixed with their object type and super key
+#   so `metadata.labels.app` has the value `mongodb-express-d-l`
+#     where `d` stands for the object type deployment
+#     and `l` the super key which is `label`
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb-express-d
   labels:
-   app: mongodb-express-l
+    app: mongodb-express-d-l
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb-express-l
+      app: mongodb-express-p-l
   template:
     metadata:
       labels:
-        app: mongodb-express-l
+        app: mongodb-express-p-l
     spec:
       containers: # containers defined here reside to one so called "pod", containers in a pod can contact each other by their names
-      - name: mongodb-express-cont
+      - name: mongodb-express-p
         image: mongo-express # https://hub.docker.com/_/mongo-express
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 8081 # port exposed to other kubernetes "things" by the container based on the image mongodb-express
         env:
-        - name: MONGO_INITDB_ROOT_USERNAME
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
           valueFrom:
             secretKeyRef:
               name: mongodb-sec
               key: mongo-root-username
-        - name: MONGO_INITDB_ROOT_PASSWORD
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb-sec

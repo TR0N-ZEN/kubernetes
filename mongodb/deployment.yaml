@@ -1,19 +1,25 @@
 # to make this deployment available in an arbitrary namespace x execute
 # kubectl apply -f ./deployment.yaml --namespace=x
+# names are suffixed with their object type and super key
+#   so `metadata.labels.app` has the value `mongodb-express-d-l`
+#     where `d` stands for the object type deployment
+#     and `l` the super key which is `label`
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb-d
   labels:
   # labels this deployment has so that other kubernetes objects can select to interact via matchLabels
-    app: mongodb-deployment
+  # the suffixes: `d` for object type `deployment` and
+  #               `l` for super key `label`
+    app: mongodb-d-l
 spec:
   replicas: 1
   selector:
     matchLabels:
     # labels here select which pods are managed by this deployment(.yaml)
     # so they are matched against spec.template.metadata.lables
-      app: mongodb
+      app: mongodb-p-l
   template:
   # in this section a pod in this deployment is described
   # documatation @
@@ -22,11 +28,13 @@ spec:
     metadata:
       labels:
       # labels the pods so they can be selected via matchLabels
-        app: mongodb-pod
+      # the suffixes: `p` for object type `pod` and
+      #               `l` for super key `label`
+        app: mongodb-p-l
     spec:
       containers:
       # this pod holds a single container
-      - name: mongodb-cont
+      - name: mongodb
         image: mongo # https://hub.docker.com/_/mongo
         ports:
         # ports listed here can be reached by any other container in the same pod via localhost
@@ -43,5 +51,3 @@ spec:
             secretKeyRef:
               name: mongodb-sec # is matched against secret.yaml.metadata.name
               key: mongo-root-password
-
-

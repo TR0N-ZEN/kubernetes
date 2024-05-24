@@ -6,7 +6,14 @@ metadata:
   name: mongodb-express-s
 spec:
   selector:
-    app: mongodb-express
+    # labels here select which pods are managed by this service(.yaml)
+    # so they are matched against
+    #   spec.template.metadata.lables
+    #     if it refers to the pods
+    #  or
+    #   spec.metadata.labels
+    #     if it refers to the deployment
+    app: mongodb-express-p-l
   type: LoadBalancer # makes service accessible from outside of the kubernetes cluster
   ports:
   - protocol: TCP
