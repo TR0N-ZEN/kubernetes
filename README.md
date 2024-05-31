@@ -1,54 +1,7 @@
-```mermaid
-graph LR
-  subgraph namespace
-    direction TB
+read
 
-    subgraph ing["ingress"]
-      ing_metadata["metadata"] --- ing_name["name"]
-      ing_spec["spec"] --- ing_rules["rules"]
-      ing_rules["rules"] --- ing_host["host"]
-      ing_host["host"] --- ing_protcol["protocol name"]
-    end
-
-    subgraph cm["configmap"]
-      direction TB
-      cm_metadata["metadata"] --> name
-      cm_metadata             --> cm_namespace[namespace]
-    end
-
-    subgraph ser["service"]
-      ser_spec[spec] --> selector
-      ser_spec[spec] --> ports
-    end
-    ports -->|"protocol,port-->targetPort"| p
-  
-    subgraph sec["secret"]
-      sec_metadata[metadata]
-      sec_name[name]
-      sec_data[data]
-    end
-    d -->|references| sec
-
-    subgraph d["deployment"]
-    direction TB
-     d_m[metadata]
-        d_m --> d_namespace[namespace]
-        d_m --> d_name[name]
-        d_m --> labels
-        d_spec[spec]
-        d_spec --> template
-        d_spec --> replicas
-    end
-    template -->|is bluebrpint data for| p
-    labels ---|matching| selector
-    replicas
-      -->|sets number of| r[replicaset]
-        -->|has one or more| p[pod]
-          -->|has one or more| c[container]
-    d -->|references| cm
-
-  end
-```
++ https://kubernetes.io/docs/concepts/
++ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
 
 ```asciiart
 
