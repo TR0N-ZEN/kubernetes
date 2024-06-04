@@ -15,6 +15,8 @@ Access and resource limitation works via namespaces.
 
 **ingress**es map uris (domain name + protocol + port + path; spec.-host.*protocol*.paths.-backend, where *protocol* is the used protocol for the connection between the ingress and the service)  
 to services (by the services name and port)
+`kubectl get ingress`
+`kubectl describe ingress xxxx`
 
 for something that comes close to the hints of a language server  
 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
@@ -31,17 +33,21 @@ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v
        │  name                      │
        │spec                        │
        │  rules                     │
-       │    host                    │
-       │      protocol name         │
-       └────────────────────────────┘
-
-                                     ┌─────────────────┐
-                                     │    service      │
-                                     │─────────────────│
-                                     │spec             │
-       ┌─────────────────────┐       │  ports          │
-       │     deployment      │       │    - protocol   │
-       ├─────────────────────┤       │      port       │
+       │   - host                   │
+       │     protocol               │
+       │        paths               │
+       │        - my_subdir         │
+       │            serviceName ────┼──┐
+       │            servicePort ────┼┐ │
+       └────────────────────────────┘│ │
+                                   ┌─┘ ▼
+                                   │ ┌─────────────────┐
+                                   │ │    service      │
+                                   │ │─────────────────│
+                                   │ │spec             │
+       ┌─────────────────────┐     │ │  ports          │
+       │     deployment      │     │ │    - protocol   │
+       ├─────────────────────┤     └►│      port       │
        │metadata             │       │      targetPort─┼───────────────────────────────┐
        │  labels─────────────┼───────┼─►selector       │                               │
        │  name               │       └─────────────────┘                               │

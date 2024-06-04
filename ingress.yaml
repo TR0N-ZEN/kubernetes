@@ -13,9 +13,9 @@ metadata:
   name: myapp-ingress
 spec:
   rules:
-    - host: myapp.com # uri of entrypoint to kubernetes cluster 
+    - host: myapp.com # domain of entrypoint to kubernetes cluster 
       http:
         paths:
-        - backend:
+        - backend: # sub directory name so e.g. myapp.com/backend/ would be what you would enter into the browser
             serviceName: myapp-internal-service # refers to metadata.name of an internal service
             servicePort: 8080 # refers to spec.ports.port of the selected service
