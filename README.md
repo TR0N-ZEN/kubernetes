@@ -37,7 +37,6 @@ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v
                   │
                deployment                             daemonset
 
-
 ```
 
 

@@ -1,0 +1,18 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mongodb-express-httproute
+spec:
+  parentRefs:
+  - name: mongodb-express-gateway-class
+  hostnames:
+  - "www.mongodb-express.com"
+  rules:
+    #- host: my-mongodb.com # domain of entrypoint to kubernetes cluster, if you test this with a local setup change your /etc/hosts if you are on linux
+  - matches:
+    - path: # sub directory name so e.g. myapp.com/mongodb-express/ would be what you would enter into the browser
+        type: PathPrefix
+        value: /mongodb-express
+    backendRefs:
+      - name: mongodb-express-s # refers to metadata.name of an internal service
+        port: 8081 # refers to spec.ports.port of the selected service
