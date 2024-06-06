@@ -31,3 +31,12 @@ if [ $1 -eq 'nodePort.service' ]; then
     -f ./mongo-express/nodePort.service.yaml
   watch --color -d 'kubectl get service;'
 fi
+if [ $1 -eq 'gateway' ]; then
+  # kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
+  kubectl apply \
+    -f ./mongo-express/service.yaml \
+    -f ./mongo-express/gatewayClass.yaml \
+    -f ./mongo-express/gateway.yaml \
+    -f ./mongo-express/HTTPRoute.yaml
+  watch --color -d 'kubectl get all; echo ""; kubectl get gateway & echo'
+fi

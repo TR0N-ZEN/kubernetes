@@ -14,8 +14,8 @@ spec:
     #   spec.metadata.labels
     #     if it refers to the deployment
     app: mongodb-express-p-l
-  type: ClusterIP # makes service an internal service
   ports:
   - protocol: TCP
     port: 8081 # port exposed by the service
     targetPort: 8081 # port exposed by pod to service
+    # nodePort: 30000 # where external IP Address will be opened, choosabele from 30000 to 32767
