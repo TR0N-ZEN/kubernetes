@@ -13,11 +13,6 @@ Access and resource limitation works via namespaces.
 
 **volume**s and *node*s are not namespaced.  
 
-**ingress**es map uris (domain name + protocol + port + path; spec.-host.*protocol*.paths.-backend, where *protocol* is the used protocol for the connection between the ingress and the service)  
-to services (by the services name and port)
-`kubectl get ingress`
-`kubectl describe ingress xxxx`
-
 for something that comes close to the hints of a language server  
 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
 
@@ -26,31 +21,18 @@ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v
 
 
 
-       ┌────────────────────────────┐
-       │        ingress             │
-       ├────────────────────────────┤
-       │metadata                    │
-       │  name                      │
-       │spec                        │
-       │  rules                     │
-       │   - host                   │
-       │     protocol               │
-       │        paths               │
-       │        - my_subdir         │
-       │            serviceName ────┼──┐
-       │            servicePort ────┼┐ │
-       └────────────────────────────┘│ │
-                                   ┌─┘ ▼
-                                   │ ┌─────────────────┐
-                                   │ │    service      │
-                                   │ │─────────────────│
-                                   │ │spec             │
-       ┌─────────────────────┐     │ │  ports          │
-       │     deployment      │     │ │    - protocol   │
-       ├─────────────────────┤     └►│      port       │
-       │metadata             │       │      targetPort─┼───────────────────────────────┐
-       │  labels─────────────┼───────┼─►selector       │                               │
-       │  name               │       └─────────────────┘                               │
+                                     ┌─────────────────┐
+                                     │    service      │
+                                     │─────────────────│
+                                     │spec             │
+                                     │  ports          │
+                                     │    - protocol   │
+       ┌─────────────────────┐       │      port       │
+       │     deployment      │       │      targetPort─┼───────────────────────────────┐                ┌────────────────┐
+       ├─────────────────────┤       │      nodePort   │◄──────────────────────────────┼────────────────┤client (browser)│
+       │metadata             │   ┌───┼─►selector       │                               │                └────────────────┘
+       │  labels─────────────┼───┘   └─────────────────┘                               │
+       │  name               │                                                         │
        │  namespace          │                                                         │
        │spec                 │           sets number of      ┌──────────┐              │
        │  replicas───────────┼──────────────────────────────►│replicaset│              │
