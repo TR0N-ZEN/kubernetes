@@ -1,4 +1,3 @@
-minikube stop
 minikube delete
 minikube start
 kubectl apply -f ./configmap.yaml -f ./secret.yaml
@@ -6,8 +5,14 @@ kubectl apply -f ./service.yaml
 kubectl apply -f ./deployment.yaml 
 kubectl apply -f ./mongo-express/service.yaml
 kubectl apply -f ./mongo-express/deployment.yaml
-kubectl apply -f ./mongo-express/ingressClass.yaml
-kubectl apply -f ./mongo-express/ingress.yaml
+
+# deploy an ingress controller
+#   the manual way, I do not want to do this
+# kubectl apply -f ./mongo-express/ingressClass.yaml
+#   the more automatic way
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/baremetal/deploy.yaml
+#   the minikube automatic way
+minikube addons enable ingress
 
 echo 'Close the following plane after all services and deployments are ready.'
 case $SHELL in
@@ -21,6 +26,10 @@ case $SHELL in
     sleep 8
     ;;
 esac
+
+kubectl apply -f ./mongo-express/ingress.yaml
+
+
 
 watch --color -d 'kubectl get all; echo ""; kubectl get ingress; echo ""; kubectl get ingressClass'
 

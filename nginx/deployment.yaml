@@ -5,16 +5,16 @@ kind: Deployment
 metadata:
   name: nginx-d
   labels:
-    app: nginx.l
+    app: nginx-l
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx.l
+      app: nginx-l
   template:
     metadata:
       labels:
-        app: nginx.l
+        app: nginx-l
     spec:
       containers:
       - name: nginx

@@ -1,4 +1,5 @@
 # https://kubernetes.io/docs/concepts/services-networking/ingress/#what-is-ingress
+# https://kubernetes.io/docs/concepts/services-networking/ingress/#simple-fanout
 
 # an ingress requires an ingress controller (which is a pod)
 # on bare metal kubernetes installations there should/has to be a load balancer
