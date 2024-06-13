@@ -5,11 +5,11 @@
        │metadata                    │
        │  name                      │
        │spec                        │
-       │  rules                     │
-       │   - host                   │
-       │     protocol               │
-       │        paths               │
-       │        - my_subdir         │
+       │  rules                     │    http://a.b/my_subdir/           ┌────────────────┐
+       │   - host: a.b              │◄───────────────────────────────────┤client (browser)│
+       │     http:                  │                                    └────────────────┘
+       │       paths                │
+       │        - /my_subdir        │
        │            serviceName ────┼──┐
        │            servicePort ────┼┐ │
        └────────────────────────────┘│ │
