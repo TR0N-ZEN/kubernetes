@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx.d
+  name: nginx-d
   labels:
     app: nginx.l
 spec:
@@ -20,4 +20,4 @@ spec:
       - name: nginx
         image: nginx
         ports:
-        - containerPort: 8080
+        - containerPort: 80

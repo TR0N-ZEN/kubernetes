@@ -6,6 +6,8 @@ kubectl apply -f ./service.yaml
 kubectl apply -f ./deployment.yaml 
 kubectl apply -f ./mongo-express/service.yaml
 kubectl apply -f ./mongo-express/deployment.yaml
+kubectl apply -f ./mongo-express/ingressClass.yaml
+kubectl apply -f ./mongo-express/ingress.yaml
 
 echo 'Close the following plane after all services and deployments are ready.'
 case $SHELL in
@@ -20,9 +22,8 @@ case $SHELL in
     ;;
 esac
 
-watch --color -d kubectl get all
+watch --color -d 'kubectl get all; echo ""; kubectl get ingress; echo ""; kubectl get ingressClass'
 
 echo 'the standard credentials for the login in the webinterface\n
      according to https://github.com/mongo-express/mongo-express\n
      admin pass'
-minikube service mongodb-express-s
