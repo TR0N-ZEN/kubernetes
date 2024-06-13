@@ -1,0 +1,5 @@
++ runs on each node, meaning also on the control plane
++ aka kubelet
++ exchanges data between container runtime on a node and an api server
++ between itself and the container runtime ther is a  
+  container runtime interface to translate calls

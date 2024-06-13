@@ -1,4 +1,11 @@
-for kubernetes objects in detail read https://kubernetes.io/docs/concepts/
+for kubernetes objects in detail read
+
++ https://trainingportal.linuxfoundation.org/learn/course/introduction-to-kubernetes
++ https://kubernetes.io/docs/concepts/
+
+
+
+## objects
 
 **namespace**s isolate/partition kubernetes entities into parts  
   which are from a kubernetes view to be managed seperately  
@@ -16,42 +23,56 @@ Access and resource limitation works via namespaces.
 for something that comes close to the hints of a language server  
 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
 
-
 ```asciiart
 
+                 pod                   service                     secret
+                  ▲
+                  │
+                  │has one or more                                 configmap
+                  │
+              replicaset
+                  ▲                                                volume
+                  │
+                  │has
+                  │
+               deployment                             daemonset
 
-
-                                     ┌─────────────────┐
-                                     │    service      │
-                                     │─────────────────│
-                                     │spec             │
-                                     │  ports          │
-                                     │    - protocol   │
-       ┌─────────────────────┐       │      port       │
-       │     deployment      │       │      targetPort─┼───────────────────────────────┐                ┌────────────────┐
-       ├─────────────────────┤       │      nodePort   │◄──────────────────────────────┼────────────────┤client (browser)│
-       │metadata             │   ┌───┼─►selector       │                               │                └────────────────┘
-       │  labels─────────────┼───┘   └─────────────────┘                               │
-       │  name               │                                                         │
-       │  namespace          │                                                         │
-       │spec                 │           sets number of      ┌──────────┐              │
-       │  replicas───────────┼──────────────────────────────►│replicaset│              │
-       │  template───────────┼───────────────────────┐       └─────┬────┘              │
-       └─┬────────────────┬──┘                       │             │ has one or more   │
-         │                │                          │             │                   │
-         │references      │references                │             ▼                   │
-         │                │                          │ describes ┌───┐                 │
-         ▼                ▼                          └──────────►│pod│◄────────────────┘
-   ┌──────────┐       ┌─────────────┐                            └─┬─┘
-   │  secret  │       │  configmap  │                              │
-   ├──────────┤       ├─────────────┤                              │ has one or more
-   │metadata  │       │metadata     │                              │
-   │name      │       │  name       │                              ▼
-   │data      │       │  namespace  │                          ┌─────────┐
-   └──────────┘       └─────────────┘                          │container│
-                                                               └─────────┘
 
 ```
+
+
+
+## components
+
+```asciiart
+# text listed in a box is a listing of so called "node agents"
+     ┌─────────────┐
+     │control plane│
+     ├─────────────┴────────────────────────────┐
+     │    ┌────┐                                │
+     │    │node│                                │
+     │    ├────┴───────────────────────────┐    │
+     │    │   api-server ◄─────────────────┼────┼───────┐
+     │    │   controller-manager           │    │       │
+     │    │   scheduler                    │    │       │
+     │    │   etcd                         │    │       │
+     │    │   kubelet                      │    │       │
+     │    │   kubeproxy                    │    │       │
+     │    │   container runtime            │    │       │
+     │    │   addons                       │    │       │
+     │    └────────────────────────────────┘    │       │
+     └──────────────────────────────────────────┘       │
+                                                        │
+                           ┌────┐                       │
+                           │node│                       │
+                           ├────┴────────────────────┐  │
+                           │   kubelet───────────────┼──┤
+                           │   kubeproxy─────────────┼──┘
+                           │   container runtime     │
+                           │   addons                │
+                           └─────────────────────────┘
+```
+
 
 ---
 

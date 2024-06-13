@@ -1,0 +1,3 @@
++ target of RESTful calls by users, admins, devs, operators and external agents
++ reads and saves cluster state from and to the key-value store
++ 

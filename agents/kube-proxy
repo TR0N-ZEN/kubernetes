@@ -1,0 +1,10 @@
++ runs on each node, meaning also on the control plane
++ updating networking rules on nodes
++ TCP, UDP, SCTP streams stream forwarding or  
+  random forwarding across a set of pod backends of an application
++ implements forwarding rules defined by user through service api objects
++ interacts with firewall on the node (e.g. iptables)
+  + configures iptables rules to capture the traffic for its ClusterIP
+    and forwards it to one of the Service's endpoints
++ watches api server on the control plane for crud operations on services and endpoints
+
