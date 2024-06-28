@@ -3,4 +3,5 @@ kind: GatewayClass
 metadata:
   name: mongodb-express-gateway-class # used by the gateway in spec.gatewayClassName
 spec:
-  controllerName: example.com/gateway-controller
+  controllerName: projectcontour.io/gateway-controller # requires execution of
+                                                       # kubectl apply -f https://projectcontour.io/quickstart/contour-gateway-provisioner.yaml
