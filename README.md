@@ -4,7 +4,6 @@ for kubernetes objects in detail read
 + https://kubernetes.io/docs/concepts/
 
 
-
 ## objects
 
 **namespace**s isolate/partition kubernetes entities into parts  
@@ -84,3 +83,28 @@ getting kubernetes on my servers I would use [kubeadm](https://kubernetes.io/doc
 
 command cache:
 
+kubectl apply \
+   -f ./service.yaml \
+   -f ./secret.yaml \
+   -f ./deployment.yaml \
+   -f ./configmap.yaml \
+   -f ./mongo-express/service.yaml \
+   -f ./mongo-express/deployment.yaml
+
+clear; kubectl get all
+
+>kubectl delete deployment mongodb-d mongodb-express-d; \
+>kubectl delete configmap mongodb-c; \
+>kubectl delete service mongodb-s mongodb-express-s; \
+>kubectl delete secret mongodb-sec;
+
+---
+
+to run kubernetes in a docker container
+`docker run --privileged --name k3s -d -e K3S_TOKEN=mynodetoken rancher/k3s:v1.27.9-k3s1 server`
+
+---
+
+## create a cluster
+
+read https://kubernetes.io/docs/setup/production-environment/tools/
