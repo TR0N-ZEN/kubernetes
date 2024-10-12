@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: satisfactory
+  labels:
+    app: Satisfactory-Deployment-Label
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Satisfactory-Pod-Label
+  template:
+    metadata:
+      labels:
+        app: Satisfactory-Pod-Label
+    spec:
+      containers:
+      - name: satisfactory
+        image: localhost:5000/satisfactory:latest
+        ports:
+        - containerPort: 7777
+          name: tcp-port
+          protocol: TCP
+        - containerPort: 7777
+          name: udp-port
+          protocol: UDP
+        env:
