@@ -4,7 +4,42 @@ for kubernetes objects in detail read
 + https://kubernetes.io/docs/concepts/
 
 
+## components
+
+```asciiart
+# text listed in a box is a listing of so called "node agents"
+     ┌─────────────┐
+     │control plane│
+     ├─────────────┴────────────────────────────┐
+     │    ┌────┐                                │
+     │    │node│                                │
+     │    ├────┴───────────────────────────┐    │
+     │    │   api-server ◄─────────────────┼────┼───────┐
+     │    │   controller-manager           │    │       │
+     │    │   scheduler                    │    │       │
+     │    │   etcd                         │    │       │
+     │    │   kubelet                      │    │       │
+     │    │   kubeproxy                    │    │       │
+     │    │   container runtime            │    │       │
+     │    │   addons                       │    │       │
+     │    └────────────────────────────────┘    │       │
+     └──────────────────────────────────────────┘       │
+                                                        │
+                           ┌────┐                       │
+                           │node│                       │
+                           ├────┴────────────────────┐  │
+                           │   kubelet───────────────┼──┤
+                           │   kubeproxy─────────────┼──┘
+                           │   container runtime     │
+                           │   addons                │
+                           └─────────────────────────┘
+```
+
+
+
 ## objects
+
+You can use the command `kubectl explain OBJECT[.ATTRIBUTE]*` to get explainations.
 
 **namespace**s isolate/partition kubernetes entities into parts  
   which are from a kubernetes view to be managed seperately  
@@ -39,50 +74,57 @@ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v
 
 ```
 
-
-
-## components
+more details
 
 ```asciiart
-# text listed in a box is a listing of so called "node agents"
-     ┌─────────────┐
-     │control plane│
-     ├─────────────┴────────────────────────────┐
-     │    ┌────┐                                │
-     │    │node│                                │
-     │    ├────┴───────────────────────────┐    │
-     │    │   api-server ◄─────────────────┼────┼───────┐
-     │    │   controller-manager           │    │       │
-     │    │   scheduler                    │    │       │
-     │    │   etcd                         │    │       │
-     │    │   kubelet                      │    │       │
-     │    │   kubeproxy                    │    │       │
-     │    │   container runtime            │    │       │
-     │    │   addons                       │    │       │
-     │    └────────────────────────────────┘    │       │
-     └──────────────────────────────────────────┘       │
-                                                        │
-                           ┌────┐                       │
-                           │node│                       │
-                           ├────┴────────────────────┐  │
-                           │   kubelet───────────────┼──┤
-                           │   kubeproxy─────────────┼──┘
-                           │   container runtime     │
-                           │   addons                │
-                           └─────────────────────────┘
+                                     ┌─────────────────┐
+                                     │    service      │
+                                     │─────────────────│
+                                     │spec             │
+                                     │  ports          │
+                                     │    - protocol   │
+       ┌─────────────────────┐       │      port       │
+       │     deployment      │       │      targetPort─┼───────────────────────────────┐                ┌────────────────┐
+       ├─────────────────────┤       │      nodePort   │◄──────────────────────────────┼────────────────┤client (browser)│
+       │metadata             │   ┌───┼─►selector       │                               │                └────────────────┘
+       │  labels─────────────┼───┘   └─────────────────┘                               │
+       │  name               │                                                         │
+       │  namespace          │                                                         │
+       │spec                 │           sets number of      ┌──────────┐              │
+       │  replicas───────────┼──────────────────────────────►│replicaset│              │
+       │  template───────────┼───────────────────────┐       └─────┬────┘              │
+       └─┬────────────────┬──┘                       │             │ has one or more   │
+         │                │                          │             │                   │
+         │references      │references                │             ▼                   │
+         │                │                          │ describes ┌───┐                 │
+         ▼                ▼                          └──────────►│pod│◄────────────────┘
+   ┌──────────┐       ┌─────────────┐                            └─┬─┘
+   │  secret  │       │  configmap  │                              │
+   ├──────────┤       ├─────────────┤                              │ has one or more
+   │metadata  │       │metadata     │                              │
+   │name      │       │  name       │                              ▼
+   │data      │       │  namespace  │                          ┌─────────┐
+   └──────────┘       └─────────────┘                          │container│
+                                                               └─────────┘
 ```
 
 
+
+## create a cluster
+
+read https://kubernetes.io/docs/setup/production-environment/tools/
+
++ for a test environment on one machine I use [minikube](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
++ to run kubernetes in a docker container `docker run --privileged --name k3s -d -e K3S_TOKEN=mynodetoken rancher/k3s:v1.27.9-k3s1 server`
++ getting kubernetes on my servers I would use [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+
 ---
-
-for a test environment on one machine I use [minikube](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
-
-getting kubernetes on my servers I would use [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-
 ---
 
 command cache:
 
+```
 kubectl apply \
    -f ./service.yaml \
    -f ./secret.yaml \
@@ -93,18 +135,11 @@ kubectl apply \
 
 clear; kubectl get all
 
->kubectl delete deployment mongodb-d mongodb-express-d; \
->kubectl delete configmap mongodb-c; \
->kubectl delete service mongodb-s mongodb-express-s; \
->kubectl delete secret mongodb-sec;
+kubectl delete deployment mongodb-d mongodb-express-d;
+kubectl delete configmap mongodb-c;
+kubectl delete service mongodb-s mongodb-express-s;
+kubectl delete secret mongodb-sec;
+```
 
----
 
-to run kubernetes in a docker container
-`docker run --privileged --name k3s -d -e K3S_TOKEN=mynodetoken rancher/k3s:v1.27.9-k3s1 server`
 
----
-
-## create a cluster
-
-read https://kubernetes.io/docs/setup/production-environment/tools/
