@@ -1,10 +1,8 @@
-for kubernetes objects in detail read
+To create a cluster you can skim and decide on these websites
 
-+ https://trainingportal.linuxfoundation.org/learn/course/introduction-to-kubernetes
-+ https://kubernetes.io/docs/concepts/
-
-
-## components
++ https://kubernetes.io/docs/tasks/tools/
++ https://kubernetes.io/docs/setup/production-environment/tools/
++ https://docs.k3s.io/
 
 ```asciiart
 # text listed in a box is a listing of so called "node agents"
@@ -35,46 +33,31 @@ for kubernetes objects in detail read
                            └─────────────────────────┘
 ```
 
+To interact with a cluster type `kubectl --help` in your shell
+or https://kubernetes.io/docs/reference/kubectl/ in your browser
+read and experiment with what you think you understood.
 
 
-## objects
-
-You can use the command `kubectl explain OBJECT[.ATTRIBUTE]*` to get explainations.
-
-**namespace**s isolate/partition kubernetes entities into parts  
-  which are from a kubernetes view to be managed seperately  
-  which does not mean pods in different namespaces can't communicate but  
-  e.g. that they are not using the same *config map*s, *secret*s though  
-`kubectl get namespace` lists all namespaces  
-`kubectl create namespace konoha_ns` creates a namespace  
-
-**configmap**s of a namespace can point to an address in another  
-namespace thus contacting *service*s in other namespaces.  
-Access and resource limitation works via namespaces.  
-
-**volume**s and *node*s are not namespaced.  
-
-for something that comes close to the hints of a language server  
-https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
-
-```asciiart
-
-                 pod                   service                     secret
-                  ▲
-                  │
-                  │has one or more                                 configmap
-                  │
-              replicaset
-                  ▲                                                volume
-                  │
-                  │has
-                  │
-               deployment                             daemonset
+Kubernetes self-disclosure about kubernetes concepts
+https://kubernetes.io/docs/concepts/. To learn more about a specific thing such
+as a *pod* you can visit
+  https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#pod-v1-core
+or type
+  `kubectl explain pod` into your shell if you have `kubectl` installed
+(and a connection to a cluster).
+You can use the command
+  `kubectl explain deployment.spec`
+to get explainations of what the attribute *spec* in a
+deployment is for.
+The command can be used in the manner
+  `kubectl explain OBJECT[.ATTRIBUTE]*`
+to get explainations, where the part `[.ATTRIBUTE]*`
+means, that nested attributes can be queried for explainations like
+  `kubectl explain deployment.spec.template`.
 
 
-```
-
-more details
+A drawn, abstract example of how the concepts materialize if you deploy a webserver like apache via
+a kubernetes deployment.
 
 ```asciiart
                                      ┌─────────────────┐
@@ -107,39 +90,3 @@ more details
    └──────────┘       └─────────────┘                          │container│
                                                                └─────────┘
 ```
-
-
-
-## create a cluster
-
-read https://kubernetes.io/docs/setup/production-environment/tools/
-
-+ for a test environment on one machine I use [minikube](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
-+ to run kubernetes in a docker container `docker run --privileged --name k3s -d -e K3S_TOKEN=mynodetoken rancher/k3s:v1.27.9-k3s1 server`
-+ getting kubernetes on my servers I would use [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-
-
----
----
-
-command cache:
-
-```
-kubectl apply \
-   -f ./service.yaml \
-   -f ./secret.yaml \
-   -f ./deployment.yaml \
-   -f ./configmap.yaml \
-   -f ./mongo-express/service.yaml \
-   -f ./mongo-express/deployment.yaml
-
-clear; kubectl get all
-
-kubectl delete deployment mongodb-d mongodb-express-d;
-kubectl delete configmap mongodb-c;
-kubectl delete service mongodb-s mongodb-express-s;
-kubectl delete secret mongodb-sec;
-```
-
-
-
