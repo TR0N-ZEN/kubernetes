@@ -1,6 +1,3 @@
-# minikube start
-# run `kubectl apply -f ./pod.yaml`
-# kubectl delete pod pod-example
 apiVersion: v1
 kind: Pod
 metadata:
@@ -9,5 +6,5 @@ spec:
   containers:
   - name: ubuntu
     image: ubuntu:latest
-    command: ["echo"]
-    args: ["Hello World"]
+    command: ["/bin/bash"]
+    args: ['-c', 'X=1; while [ $X -lt 1000000000 ];do echo "$X"; X+=1; sleep 1; done']
