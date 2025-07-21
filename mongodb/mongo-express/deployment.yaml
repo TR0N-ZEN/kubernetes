@@ -41,3 +41,5 @@ spec:
             configMapKeyRef:
               name: mongodb-c
               key: database_url
+        - name: ME_CONFIG_SITE_BASEURL
+          value: "/mongodb"
