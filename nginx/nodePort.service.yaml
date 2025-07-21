@@ -1,0 +1,14 @@
+# to make this service available in an arbitrary namspace x execute
+# kubectl apply -f ./service.yaml --namespace=x
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-s
+spec:
+  selector:
+    app: nginx.l
+  ports:
+    - protocol: TCP
+      port: 80 # port that is exposed by the service (thats why it is just port because it is implicity of the service since we are in the service file) to the outer world
+      targetPort: 8080 # port that service attaches to on the container
+

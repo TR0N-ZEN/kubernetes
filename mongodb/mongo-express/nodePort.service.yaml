@@ -1,0 +1,22 @@
+# to make this service available in an arbitrary namspace x execute
+# kubectl apply -f ./service.yaml --namespace=x
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-express-s
+spec:
+  selector:
+    # labels here select which pods are managed by this service(.yaml)
+    # so they are matched against
+    #   spec.template.metadata.lables
+    #     if it refers to the pods
+    #  or
+    #   spec.metadata.labels
+    #     if it refers to the deployment
+    app: mongodb-express-p-l
+  type: LoadBalancer # makes service accessible from outside of the kubernetes cluster, and a so called "external service"
+  ports:
+  - protocol: TCP
+    port: 8081 # port exposed by the service
+    targetPort: 8081 # port exposed by pod to service
+    nodePort: 30000 # where external IP Address will be opened, choosabele from 30000 to 32767
