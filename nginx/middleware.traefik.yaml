@@ -1,0 +1,12 @@
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/middlewares/ipallowlist/
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: allow-list
+spec:
+  ipAllowList:
+    ipStrategy:
+      excludedIPs:
+        - 10.0.0.0/8
+    sourceRange:
+      - 192.168.122.0/24

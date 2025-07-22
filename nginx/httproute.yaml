@@ -1,0 +1,24 @@
+# If using a Middleware read:
+#   https://doc.traefik.io/traefik/reference/routing-configuration/kubernetes/gateway-api/#using-traefik-middleware-as-httproute-filter
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nginx-httproute
+spec:
+  parentRefs:
+    - name: nginx-gateway
+      kind: Gateway
+  rules:
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: allow-list
+      backendRefs:
+        - name: nginx-s # refers to metadata.name of an internal service
+          port: 80 # refers to spec.ports.port of the selected service
