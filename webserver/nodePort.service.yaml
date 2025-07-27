@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-s
+  name: webserver-s
 spec:
   selector:
-    app: nginx.l
+    app: webserver.l
   ports:
     - protocol: TCP
       port: 80 # port that is exposed by the service (thats why it is just port because it is implicity of the service since we are in the service file) to the outer world

@@ -3,21 +3,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-d
+  name: webserver-d
   labels:
-    app: nginx-l
+    app: webserver-l
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-l
+      app: webserver-l
   template:
     metadata:
       labels:
-        app: nginx-l
+        app: webserver-l
     spec:
       containers:
-      - name: nginx
-        image: nginx
+      - name: webserver
+        image: traefik/whoami
         ports:
         - containerPort: 80
