@@ -18,13 +18,19 @@ esac
 watch --color -d 'kubectl get pods; kubectl get services;'
 
 
-if [ $1 -eq 'ingress' ]; then
+if [ $1 = 'ingress' ]; then
   kubectl apply \
-    -f ./service.yaml \
     -f ./ingress.yaml
   watch --color -d 'kubectl get service; kubectl get ingress;'
 fi
-if [ $1 -eq 'nodePort.service' ]; then
+if [ $1 = 'gateway' ]; then
+  kubectl apply \
+    -f ./middleware.traefik.yaml \
+    -f ./httproute.yaml \
+    -f ./gateway.yaml
+  watch --color -d 'kubectl get service; kubectl get ingress;'
+fi
+if [ $1 = 'nodePort.service' ]; then
   kubectl apply \
     -f ./nodePort.service.yaml
   watch --color -d 'kubectl get service;'
